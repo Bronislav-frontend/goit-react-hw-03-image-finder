@@ -8,8 +8,8 @@ export default class Searchbar extends Component {
         imageName: '',
     };
     
-    onNameChange = evt => {
-        this.setState({ imageName: evt.currentTarget.value.toLowerCase() });
+    onNameChange = ({ currentTarget: { value }}) => {
+        this.setState({ imageName: value.toLowerCase() });
     };
 
     onSubmit = evt => {

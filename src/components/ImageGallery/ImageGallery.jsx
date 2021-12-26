@@ -14,7 +14,7 @@ export default class ImageGallery extends Component {
     status: 'idle',
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     const prevName = prevProps.imageName;
     const nextName = this.props.imageName;
     const prevPage = prevState.page;
@@ -27,9 +27,10 @@ export default class ImageGallery extends Component {
     if (prevName !== nextName || prevPage !== nextPage) {
       this.setState({ status: 'pending' });
 
-      fetchImages(nextName, nextPage).then(
-        ({ hits: newImagesArray, totalHits: totalImages }) => {
-          if (newImagesArray.length === 0 && totalImages === 0) {
+      const { hits: newImagesArray, totalHits: totalImages } =
+        await fetchImages(nextName, nextPage)
+      
+       if (newImagesArray.length === 0 && totalImages === 0) {
             toast.error('Ничего не найдено =(');
             return;
           }
@@ -45,8 +46,6 @@ export default class ImageGallery extends Component {
             imagesArray: [...imagesArray, ...newImagesArray],
             status: 'resolved',
           }));
-        },
-      );
     }
   }
 
